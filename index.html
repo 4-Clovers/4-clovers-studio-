@@ -1022,7 +1022,8 @@
                 })
                 .catch((error) => {
                     statusEl.className = "send-status error";
-                    statusEl.textContent = "Couldn't send the receipt email. The order is still recorded above.";
+                    const detail = (error && (error.text || error.message)) ? (error.text || error.message) : JSON.stringify(error);
+                    statusEl.textContent = "Couldn't send the receipt email. Debug info: " + detail;
                     console.error("EmailJS error:", error);
                 });
         }
