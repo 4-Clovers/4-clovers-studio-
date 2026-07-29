@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-clovers studio 🍀</title>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        /* --- PASTEL GREEN PALETTE & VARIABLES --- */
+        :root {
+            --bg-color: #f4f8f5;
+            --card-bg: #ffffff;
+            --primary-sage: #c1d7ae;
+            --accent-mint: #a3c9a8;
+            --dark-sage: #536b56;
+            --text-color: #4a5d4e;
+            --pastel-border: #e2ede4;
+            --error-red: #c96a6a;
+            --shadow: 0 8px 20px rgba(163, 201, 168, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-sage);
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .cart-btn {
+            background-color: var(--primary-sage);
+            color: var(--dark-sage);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cart-btn:hover {
+            background-color: var(--accent-mint);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--dark-sage);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1rem;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1.5px solid var(--primary-sage);
+            color: var(--dark-sage);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary-sage);
+            color: var(--dark-sage);
+        }
+
+        .section-title {
+            text-align: center;
+            color: var(--dark-sage);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px dashed var(--primary-sage);
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+
+        .section-wrapper {
+            text-align: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+            padding: 1rem 2rem 3rem;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--pastel-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 160px;
+            background-color: var(--bg-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .product-image:hover {
+            background-color: var(--primary-sage);
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            color: var(--dark-sage);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .product-price {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.8rem;
+        }
+
+        .options-select {
+            width: 100%;
+            padding: 0.4rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary-sage);
+            background-color: var(--bg-color);
+            color: var(--dark-sage);
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+            outline: none;
+        }
+
+        .add-to-cart {
+            background-color: var(--bg-color);
+            border: 1.5px solid var(--accent-mint);
+            color: var(--dark-sage);
+            padding: 0.6rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--accent-mint);
+            color: white;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 320px;
+            max-width: 90vw;
+            height: 100%;
+            background-color: var(--card-bg);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+            transition: right 0.3s ease;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--pastel-border);
+            padding-bottom: 1rem;
+            color: var(--dark-sage);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-sage);
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        .cart-item {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--pastel-border);
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .cart-item-option {
+            font-size: 0.8rem;
+            opacity: 0.75;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .qty-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--primary-sage);
+            color: var(--dark-sage);
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .qty-btn:hover {
+            background-color: var(--primary-sage);
+        }
+
+        .remove-item-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--error-red);
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .cart-footer {
+            border-top: 1px solid var(--pastel-border);
+            padding-top: 1rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: var(--dark-sage);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 440px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--pastel-border);
+            position: relative;
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            color: var(--dark-sage);
+            margin-bottom: 1.2rem;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-opt-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--primary-sage);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--dark-sage);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .payment-opt-btn.selected, .payment-opt-btn:hover {
+            background-color: var(--primary-sage);
+            color: var(--dark-sage);
+        }
+
+        .checkout-form {
+            display: none;
+            flex-direction: column;
+            gap: 0.3rem;
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-form.active {
+            display: flex;
+        }
+
+        .form-field {
+            margin-bottom: 0.6rem;
+        }
+
+        .checkout-form label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark-sage);
+        }
+
+        .checkout-form input, .checkout-form textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary-sage);
+            background-color: var(--bg-color);
+            outline: none;
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+
+        .checkout-form input:invalid:not(:placeholder-shown),
+        .checkout-form textarea:invalid:not(:placeholder-shown) {
+            border-color: var(--error-red);
+        }
+
+        .field-error {
+            font-size: 0.75rem;
+            color: var(--error-red);
+            min-height: 1em;
+            margin-top: 0.2rem;
+        }
+
+        .qr-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .qr-container.active {
+            display: flex;
+        }
+
+        .qr-code-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 12px;
+            border: 2px solid var(--primary-sage);
+            margin: 1rem 0;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background-color: var(--dark-sage);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .confirm-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .unavailable-badge {
+            background-color: var(--error-red);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 0.3rem 0.6rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .case-preview-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .case-preview {
+            width: 140px;
+            height: 260px;
+            border-radius: 28px;
+            border: 3px solid var(--dark-sage);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            overflow: hidden;
+            box-shadow: inset 0 8px 16px rgba(255,255,255,0.4), inset 0 -14px 22px rgba(0,0,0,0.12);
+        }
+
+        .case-preview-charms {
+            position: absolute;
+            inset: 0;
+        }
+
+        .placed-item {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+            font-size: 1.6rem;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .placed-item:active {
+            cursor: grabbing;
+            z-index: 3;
+        }
+
+        .bead-item svg {
+            display: block;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+        }
+
+        .case-preview-text {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--dark-sage);
+            text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+            max-width: 88%;
+            text-align: center;
+            word-break: break-word;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .case-preview-hint {
+            font-size: 0.72rem;
+            opacity: 0.7;
+            margin-top: 0.4rem;
+        }
+
+        .customize-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--dark-sage);
+            margin: 0.4rem 0 0.3rem;
+        }
+
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .swatch-grid.colors {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .swatch-grid.beads {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .bead-swatch-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .case-text-input {
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary-sage);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            outline: none;
+        }
+
+        .charm-swatch, .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            border: 2px solid var(--pastel-border);
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 0.4rem 0.2rem;
+            cursor: pointer;
+            font-size: 0.68rem;
+            color: var(--text-color);
+            transition: all 0.15s ease;
+        }
+
+        .charm-swatch:disabled, .color-swatch:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .charm-swatch.selected, .color-swatch.selected {
+            border-color: var(--accent-mint);
+            background-color: var(--primary-sage);
+        }
+
+        .charm-swatch-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .charm-item svg {
+            display: block;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+        }
+
+        .color-swatch-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.15);
+            display: block;
+        }
+
+        .pick-counter {
+            font-size: 0.72rem;
+            opacity: 0.75;
+            margin-top: 0.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .send-status {
+            font-size: 0.8rem;
+            margin-top: 0.6rem;
+            min-height: 1.1em;
+        }
+
+        .send-status.error { color: var(--error-red); }
+        .send-status.ok { color: var(--dark-sage); }
+
+        .receipt-card {
+            background-color: var(--bg-color);
+            border: 1px dashed var(--dark-sage);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: left;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-color);
+        }
+
+        .receipt-card h4 {
+            color: var(--dark-sage);
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .receipt-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        footer {
+            margin-top: auto;
+            background-color: var(--card-bg);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--dark-sage);
+            border-top: 1px solid var(--pastel-border);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: var(--dark-sage);
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 400;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="logo" onclick="filterProducts('all', document.querySelector('.filter-btn'))">4-clovers studio 🍀</button>
+        <button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
+    </header>
+
+    <section class="hero">
+        <h1>Handmade with Love & Luck</h1>
+        <p>Aesthetic phone cases, trinkets, stickers & K-pop goodies</p>
+    </section>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterProducts('all', this)">All Items</button>
+        <button class="filter-btn" onclick="filterProducts('cases', this)">Phone Cases</button>
+        <button class="filter-btn" onclick="filterProducts('keychains', this)">Keychains</button>
+        <button class="filter-btn" onclick="filterProducts('trinkets', this)">Trinkets</button>
+        <button class="filter-btn" onclick="filterProducts('kpop', this)">Photocards</button>
+        <button class="filter-btn" onclick="filterProducts('stickers', this)">Stickers</button>
+    </div>
+
+    <main id="main-content"></main>
+
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-btn" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p style="opacity: 0.6; text-align: center; margin-top: 2rem;">Your cart is empty!</p>
+        </div>
+        <div class="cart-footer">
+            <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkout-btn" onclick="openCheckoutModal()" disabled>Checkout</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCheckoutModal()" style="position: absolute; top: 1rem; right: 1.2rem;">&times;</button>
+            <h3 id="modal-title">Choose Payment Method</h3>
+
+            <div class="payment-options" id="payment-options-group">
+                <button class="payment-opt-btn" id="opt-paynow" onclick="selectPaymentMethod('paynow')">PayNow</button>
+                <button class="payment-opt-btn" id="opt-cash" onclick="selectPaymentMethod('cash')">Cash on Meetup</button>
+            </div>
+
+            <form class="checkout-form" id="checkout-form" onsubmit="handleFormSubmit(event)" novalidate>
+                <div class="form-field">
+                    <label>Phone Number</label>
+                    <input type="tel" id="cust-phone" placeholder="e.g. 91234567" required pattern="^[+]?[0-9 ]{7,15}$">
+                    <div class="field-error" id="err-phone"></div>
+                </div>
+                <div class="form-field">
+                    <label>Email Address</label>
+                    <input type="email" id="cust-email" placeholder="e.g. name@example.com" required>
+                    <div class="field-error" id="err-email"></div>
+                </div>
+                <div class="form-field">
+                    <label>Mailing Address / Pickup Info</label>
+                    <textarea id="cust-address" rows="3" placeholder="Enter full shipping or pickup location" required></textarea>
+                    <div class="field-error" id="err-address"></div>
+                </div>
+                <div class="form-field">
+                    <label>Remarks (optional)</label>
+                    <textarea id="cust-remarks" rows="2" placeholder="Any special requests or notes?"></textarea>
+                </div>
+                <button type="submit" class="confirm-btn">Submit Details & Proceed</button>
+            </form>
+
+            <div class="qr-container" id="qr-display">
+                <h4 style="color: var(--dark-sage);">Scan QR Code to PayNow</h4>
+                <img src="paynow-qr.png" alt="PayNow QR Code" class="qr-code-img">
+                <p style="font-size: 0.85rem; opacity: 0.8;">Scan with your mobile banking app to complete payment.</p>
+                <button class="confirm-btn" id="paynow-confirm-btn" style="margin-top: 1rem;" onclick="confirmPaymentAndSendReceipt()">Confirm Payment & Get Receipt</button>
+                <div class="send-status" id="paynow-send-status"></div>
+            </div>
+
+            <div class="qr-container" id="receipt-display">
+                <h4 style="color: var(--dark-sage);">🎉 Order Confirmed!</h4>
+                <p style="font-size: 0.85rem; opacity: 0.85; margin: 0.4rem 0;" id="receipt-email-note"></p>
+                <div class="send-status" id="receipt-send-status"></div>
+
+                <div class="receipt-card" id="receipt-details"></div>
+
+                <button class="confirm-btn" style="margin-top: 1rem;" onclick="finishCheckout()">Done & Back to Store</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="case-builder-modal">
+        <div class="modal-content" style="max-width: 480px;">
+            <button class="close-btn" onclick="closeCaseBuilder()" style="position: absolute; top: 1rem; right: 1.2rem;">&times;</button>
+            <h3 id="case-builder-title">Design Your Case</h3>
+
+            <div class="customize-label" id="case-text-label" style="text-align:left; display:none;">Type your name or words (max 18 characters):</div>
+            <input type="text" id="case-text-input" class="case-text-input" maxlength="18" placeholder="e.g. Aeri ✨" oninput="updateCaseText(this.value)" style="display:none;">
+
+            <div class="case-preview-wrap">
+                <div class="case-preview" id="case-preview">
+                    <div class="case-preview-text" id="case-preview-text"></div>
+                    <div class="case-preview-charms" id="case-preview-charms"></div>
+                </div>
+                <p class="case-preview-hint">Drag charms & beads to arrange them — tap one to remove it</p>
+            </div>
+
+            <div class="customize-label" style="text-align:left;">Choose 5 charms:</div>
+            <div class="swatch-grid" id="charm-picker"></div>
+            <div class="pick-counter" id="charm-counter" style="text-align:left;"></div>
+
+            <div class="customize-label" style="text-align:left;">Add real beads (optional):</div>
+            <div class="swatch-grid beads" id="bead-picker"></div>
+            <div class="pick-counter" id="bead-counter" style="text-align:left;"></div>
+
+            <div class="customize-label" style="text-align:left;">Choose 2 cream colours:</div>
+            <div class="swatch-grid colors" id="color-picker"></div>
+            <div class="pick-counter" id="color-counter" style="text-align:left;"></div>
+
+            <button class="confirm-btn" id="case-builder-confirm" onclick="confirmCaseBuilder()" disabled>Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <footer>
+        <p>&copy; 2026 4-clovers studio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        /* =========================================================
+           EMAILJS CONFIG — fill these in with your own EmailJS
+           account details (see the setup notes shared alongside
+           this file). Nothing will send until all three are set.
+        ========================================================= */
+        const EMAILJS_PUBLIC_KEY  = "BV7j0Lmj_i1DzgJkg";
+        const EMAILJS_SERVICE_ID  = "service_svwdu8e";
+        const EMAILJS_TEMPLATE_ID = "template_l93db5q";
+
+        // Where order notifications go — your two addresses.
+        const ADMIN_EMAILS = ["yunjia.zhou13@gmail.com", "yunjiazhou24@gmail.com"];
+
+        if (window.emailjs && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        }
+
+        const phoneModels = [
+            "iPhone X", "iPhone 11", "iPhone 12", "iPhone 13", "iPhone 13 Pro",
+            "iPhone 13 Pro Max", "iPhone 14", "iPhone 14 Pro", "iPhone 14 Pro Max",
+            "iPhone 15", "iPhone 15 Pro", "iPhone 15 Pro Max", "iPhone 16", "iPhone 16 Pro",
+            "iPhone 16 Pro Max", "iPhone 17", "iPhone 17 pro", "iPhone 17 Pro Max", "Samsung S23", "Samsung S24", "Samsung S24 Ultra"
+        ];
+
+        const products = [
+            { id: 101, name: "Custom Name/Text Resin Case", category: "cases", subcategory: "customized", price: 15.00, icon: "✨", options: phoneModels, builderType: "charms", allowText: true, available: true },
+            { id: 102, name: "Custom Photo Toploader Case", category: "cases", subcategory: "customized", price: 15.00, icon: "📸", options: phoneModels, builderType: "charms", available: true },
+            { id: 103, name: "Custom Charm & Beads Case", category: "cases", subcategory: "customized", price: 15.00, icon: "🎨", options: phoneModels, builderType: "charms", available: true },
+            { id: 201, name: "Winnie the Pooh Honey Case", category: "cases", subcategory: "non-customized", price: 13.00, icon: "🍯", options: phoneModels, available: false },
+            { id: 202, name: "Piggy Pink Cream Case", category: "cases", subcategory: "non-customized", price: 13.00, icon: "🐷", options: phoneModels, available: false },
+            { id: 203, name: "Hello Kitty Red Bow Case", category: "cases", subcategory: "non-customized", price: 13.00, icon: "🎀", options: phoneModels, available: false },
+            { id: 204, name: "Kuromi Gothic Pearl Case", category: "cases", subcategory: "non-customized", price: 13.00, icon: "🖤", options: phoneModels, available: false },
+            { id: 205, name: "Hangyodon Ocean Mint Case", category: "cases", subcategory: "non-customized", price: 13.00, icon: "🐟", options: phoneModels, available: false },
+            { id: 206, name: "Pochacco Puppy Clover Case", category: "cases", subcategory: "non-customized", price: 13.00, icon: "🐶", options: phoneModels, available: false },
+            { id: 3, name: "Lucky Clover Charm", category: "keychains", price: 8.50, icon: "🔑", options: ["Green Clover", "White Clover"] },
+            { id: 4, name: "Pastel Frog Dish", category: "trinkets", price: 12.00, icon: "🐸", options: ["Mint Green", "Sage Green"], available: false },
+            { id: 7, name: "Charms Surprise Pack", category: "trinkets", price: 3.00, icon: "🎁", options: [{ name: "1 Pack", price: 3.00 }, { name: "2 Packs", price: 5.00 }] },
+            { id: 5, name: "K-pop Photocards", category: "kpop", price: 3.00, icon: "✨", options: [{ name: "NewJeans - Hanni", price: 3.00 }, { name: "NewJeans - Hyein", price: 3.00 }, { name: "NewJeans - Haerin", price: 3.00 }, { name: "LE SSERAFIM - Yunjin", price: 6.00 }, { name: "(G)I-DLE - Minnie", price: 5.00 }, { name: "(G)I-DLE - Miyeon", price: 5.00 }] },
+            { id: 6, name: "Surprise Sticker Pack!", category: "stickers", price: 2.50, icon: "🌿", options: [{ name: "1 Pack", price: 2.50 }, { name: "2 Packs", price: 4.50 }] }
+        ];
+
+        const CHARM_CHOICES = [
+            "Pig", "Hello Kitty", "Hangyodon", "Kuromi", "Pom Pom Purin", "Stars", "Dots",
+            "Sprinkles (White)", "Sprinkles (Pink)", "Sprinkles (Blue)", "Hearts", "Food",
+            "Camera", "Vintage Camera", "Film Reel", "Cassette Tape", "Polaroid Photo",
+            "Rotary Phone", "Vinyl Record", "Vintage Radio", "Pocket Watch", "Love Letter", "Vintage Rose"
+        ];
+        const CHARM_PICK_LIMIT = 5;
+
+        // Realistic charm renderer — small illustrated SVG charms instead of emoji.
+        // Each charm is drawn as a glossy resin-style shape with shading, so the
+        // picker and the case preview both show the same handcrafted look.
+        function charmSVG(name, size, idSuffix) {
+            const gid = `charmGloss_${idSuffix}`;
+            const sid = `charmShine_${idSuffix}`;
+            const defs = `<defs>
+                <radialGradient id="${gid}" cx="35%" cy="28%" r="80%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+                    <stop offset="35%" stop-color="#ffffff" stop-opacity="0.08"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0.12"/>
+                </radialGradient>
+                <radialGradient id="${sid}" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                </radialGradient>
+            </defs>`;
+            const gloss = (r) => `<circle cx="16" cy="16" r="${r}" fill="url(#${gid})"/>`;
+            const shadow = `<ellipse cx="16" cy="28.5" rx="8" ry="1.8" fill="#000000" opacity="0.15"/>`;
+
+            let body = "";
+            switch (name) {
+                case "Pig":
+                    body = `<ellipse cx="16" cy="17" rx="10" ry="8.5" fill="#f3a9c0"/>
+                        <ellipse cx="8" cy="9" rx="3" ry="3.4" fill="#f3a9c0"/>
+                        <ellipse cx="24" cy="9" rx="3" ry="3.4" fill="#f3a9c0"/>
+                        <ellipse cx="8" cy="9.5" rx="1.3" ry="1.6" fill="#e88aa5"/>
+                        <ellipse cx="24" cy="9.5" rx="1.3" ry="1.6" fill="#e88aa5"/>
+                        <ellipse cx="16" cy="19" rx="4.4" ry="3.2" fill="#e88aa5"/>
+                        <ellipse cx="14" cy="19" rx="0.9" ry="1.2" fill="#c96a8a"/>
+                        <ellipse cx="18" cy="19" rx="0.9" ry="1.2" fill="#c96a8a"/>
+                        <circle cx="12" cy="15" r="1.1" fill="#3a2a2a"/>
+                        <circle cx="20" cy="15" r="1.1" fill="#3a2a2a"/>`;
+                    break;
+                case "Hello Kitty":
+                    body = `<path d="M16 8 C13 11 6 10 6 15 C6 19 11 20 16 17 C21 20 26 19 26 15 C26 10 19 11 16 8 Z" fill="#e8536b"/>
+                        <ellipse cx="16" cy="15.2" rx="2.6" ry="2.2" fill="#f7d24a"/>
+                        <path d="M16 8 C13 11 6 10 6 15 L16 15 Z" fill="#f27b8e" opacity="0.6"/>`;
+                    break;
+                case "Hangyodon":
+                    body = `<path d="M6 17 C6 10 13 6 20 8 C25 9.5 27 13 27 17 C27 21 24 24 18 24 C11 24 6 22 6 17 Z" fill="#8fcbe0"/>
+                        <path d="M25 15 L30 12 L29 18 Z" fill="#8fcbe0"/>
+                        <circle cx="13" cy="15" r="1.3" fill="#2c3e42"/>
+                        <path d="M9 20 C12 22 16 22 19 20" stroke="#2c3e42" stroke-width="1" fill="none" stroke-linecap="round"/>`;
+                    break;
+                case "Kuromi":
+                    body = `<path d="M16 6 C10 6 8 11 9 16 C6 17 6 21 9 22 C7 25 10 27 13 25 C14 27 18 27 19 25 C22 27 25 25 23 22 C26 21 26 17 23 16 C24 11 22 6 16 6 Z" fill="#2b2b2b"/>
+                        <circle cx="12.5" cy="16" r="1.2" fill="#ffffff"/>
+                        <circle cx="19.5" cy="16" r="1.2" fill="#ffffff"/>
+                        <path d="M14 20 C15 21 17 21 18 20" stroke="#ffffff" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+                        <path d="M16 9 L17.5 12 L14.5 12 Z" fill="#b98ed6"/>`;
+                    break;
+                case "Pom Pom Purin":
+                    body = `<path d="M8 20 C8 13 11 9 16 9 C21 9 24 13 24 20 Z" fill="#f0c97a"/>
+                        <path d="M8 20 C8 24 24 24 24 20 C20 22 12 22 8 20 Z" fill="#c98a3f"/>
+                        <ellipse cx="12" cy="7" rx="3" ry="2" fill="#7a5230"/>
+                        <path d="M10 14 C13 12 19 12 22 14" stroke="#c98a3f" stroke-width="1" fill="none" opacity="0.7"/>`;
+                    break;
+                case "Stars":
+                    body = `<path d="M16 6 L18.5 13 L26 13.5 L20 18 L22 25.5 L16 21.3 L10 25.5 L12 18 L6 13.5 L13.5 13 Z" fill="#f6c945" stroke="#d9a520" stroke-width="0.6"/>`;
+                    break;
+                case "Dots":
+                    body = `<circle cx="16" cy="16" r="9" fill="#4a7fc9"/>
+                        <circle cx="16" cy="16" r="9" fill="none" stroke="#2f5a97" stroke-width="0.8"/>`;
+                    break;
+                case "Sprinkles (White)":
+                    body = `<g fill="#f7f5f0" stroke="#d8d5cc" stroke-width="0.4">
+                        <rect x="7" y="9" width="4" height="10" rx="2" transform="rotate(-20 9 14)"/>
+                        <rect x="18" y="7" width="4" height="10" rx="2" transform="rotate(15 20 12)"/>
+                        <rect x="13" y="18" width="4" height="10" rx="2" transform="rotate(-8 15 23)"/>
+                        <rect x="21" y="17" width="4" height="10" rx="2" transform="rotate(25 23 22)"/>
+                    </g>`;
+                    break;
+                case "Sprinkles (Pink)":
+                    body = `<g fill="#f5b8cc" stroke="#e29ab3" stroke-width="0.4">
+                        <rect x="7" y="9" width="4" height="10" rx="2" transform="rotate(-20 9 14)"/>
+                        <rect x="18" y="7" width="4" height="10" rx="2" transform="rotate(15 20 12)"/>
+                        <rect x="13" y="18" width="4" height="10" rx="2" transform="rotate(-8 15 23)"/>
+                        <rect x="21" y="17" width="4" height="10" rx="2" transform="rotate(25 23 22)"/>
+                    </g>`;
+                    break;
+                case "Sprinkles (Blue)":
+                    body = `<g fill="#a8d4f0" stroke="#8bb9d9" stroke-width="0.4">
+                        <rect x="7" y="9" width="4" height="10" rx="2" transform="rotate(-20 9 14)"/>
+                        <rect x="18" y="7" width="4" height="10" rx="2" transform="rotate(15 20 12)"/>
+                        <rect x="13" y="18" width="4" height="10" rx="2" transform="rotate(-8 15 23)"/>
+                        <rect x="21" y="17" width="4" height="10" rx="2" transform="rotate(25 23 22)"/>
+                    </g>`;
+                    break;
+                case "Hearts":
+                    body = `<path d="M16 25 C6 18 6 10 12 9 C14.5 8.6 16 10.2 16 12 C16 10.2 17.5 8.6 20 9 C26 10 26 18 16 25 Z" fill="#e05a6e"/>`;
+                    break;
+                case "Food":
+                    body = `<path d="M16 8 C22 8 25 14 22 20 C20 24 12 24 10 20 C7 14 10 8 16 8 Z" fill="#e0435a"/>
+                        <ellipse cx="13" cy="13" rx="0.9" ry="1.2" fill="#f7d24a"/>
+                        <ellipse cx="18" cy="12" rx="0.9" ry="1.2" fill="#f7d24a"/>
+                        <ellipse cx="19" cy="17" rx="0.9" ry="1.2" fill="#f7d24a"/>
+                        <ellipse cx="13" cy="18" rx="0.9" ry="1.2" fill="#f7d24a"/>
+                        <path d="M13 8 C14 5.5 18 5.5 19 8 Z" fill="#5fa363"/>`;
+                    break;
+                case "Camera":
+                    body = `<rect x="6" y="11" width="20" height="14" rx="2.5" fill="#4a4a4a"/>
+                        <rect x="11" y="7" width="6" height="4" rx="1" fill="#4a4a4a"/>
+                        <circle cx="16" cy="18" r="5" fill="#2b2b2b"/>
+                        <circle cx="16" cy="18" r="3" fill="#6ea3d6"/>
+                        <circle cx="22" cy="14" r="1" fill="#e0435a"/>`;
+                    break;
+                case "Vintage Camera":
+                    body = `<rect x="6" y="12" width="20" height="12" rx="1.5" fill="#8a6a4a"/>
+                        <rect x="6" y="12" width="20" height="3" fill="#c9a97a"/>
+                        <circle cx="14" cy="19" r="4.5" fill="#2b2b2b"/>
+                        <circle cx="14" cy="19" r="2.6" fill="#7ea3c9"/>
+                        <rect x="21" y="14" width="4" height="3" rx="0.6" fill="#2b2b2b"/>`;
+                    break;
+                case "Film Reel":
+                    body = `<circle cx="16" cy="16" r="10" fill="#3a3a3a"/>
+                        <circle cx="16" cy="16" r="2.4" fill="#c9c9c9"/>
+                        <circle cx="16" cy="8.5" r="2" fill="#c9c9c9"/>
+                        <circle cx="22.5" cy="12.5" r="2" fill="#c9c9c9"/>
+                        <circle cx="22.5" cy="19.5" r="2" fill="#c9c9c9"/>
+                        <circle cx="16" cy="23.5" r="2" fill="#c9c9c9"/>
+                        <circle cx="9.5" cy="19.5" r="2" fill="#c9c9c9"/>
+                        <circle cx="9.5" cy="12.5" r="2" fill="#c9c9c9"/>`;
+                    break;
+                case "Cassette Tape":
+                    body = `<rect x="5" y="9" width="22" height="14" rx="2" fill="#e6e1d6"/>
+                        <rect x="8" y="12" width="16" height="5" rx="1" fill="#3a3a3a"/>
+                        <circle cx="12" cy="14.5" r="2.6" fill="#c9c4b6"/>
+                        <circle cx="20" cy="14.5" r="2.6" fill="#c9c4b6"/>
+                        <circle cx="12" cy="14.5" r="1" fill="#7a7666"/>
+                        <circle cx="20" cy="14.5" r="1" fill="#7a7666"/>
+                        <rect x="9" y="19" width="14" height="1.6" fill="#a9a396"/>`;
+                    break;
+                case "Polaroid Photo":
+                    body = `<rect x="6" y="6" width="20" height="22" rx="1" fill="#ffffff" stroke="#d8d5cc" stroke-width="0.6"/>
+                        <rect x="8.5" y="8.5" width="15" height="13" fill="#8fbcd9"/>`;
+                    break;
+                case "Rotary Phone":
+                    body = `<rect x="6" y="18" width="20" height="8" rx="2.5" fill="#3a5a6e"/>
+                        <circle cx="16" cy="13" r="9" fill="#446c82"/>
+                        <circle cx="16" cy="13" r="6.2" fill="#dcd8cc"/>
+                        <circle cx="16" cy="8.3" r="0.9" fill="#3a3a3a"/>
+                        <circle cx="19.7" cy="10.6" r="0.9" fill="#3a3a3a"/>
+                        <circle cx="19.7" cy="15.4" r="0.9" fill="#3a3a3a"/>
+                        <circle cx="16" cy="17.7" r="0.9" fill="#3a3a3a"/>
+                        <circle cx="12.3" cy="15.4" r="0.9" fill="#3a3a3a"/>
+                        <circle cx="12.3" cy="10.6" r="0.9" fill="#3a3a3a"/>`;
+                    break;
+                case "Vinyl Record":
+                    body = `<circle cx="16" cy="16" r="10.5" fill="#1c1c1c"/>
+                        <circle cx="16" cy="16" r="8.5" fill="none" stroke="#3a3a3a" stroke-width="0.4"/>
+                        <circle cx="16" cy="16" r="6.5" fill="none" stroke="#3a3a3a" stroke-width="0.4"/>
+                        <circle cx="16" cy="16" r="4.5" fill="none" stroke="#3a3a3a" stroke-width="0.4"/>
+                        <circle cx="16" cy="16" r="3.2" fill="#c9432f"/>
+                        <circle cx="16" cy="16" r="0.9" fill="#1c1c1c"/>`;
+                    break;
+                case "Vintage Radio":
+                    body = `<rect x="6" y="10" width="20" height="15" rx="2.5" fill="#a9744a"/>
+                        <circle cx="12" cy="17.5" r="3.6" fill="#f0ebe0"/>
+                        <circle cx="12" cy="17.5" r="1.1" fill="#8a6a4a"/>
+                        <rect x="17" y="14" width="7" height="4" rx="0.8" fill="#3a3a3a"/>
+                        <rect x="14" y="6" width="1.4" height="5" fill="#5a5a5a"/>
+                        <rect x="17" y="5" width="1.4" height="6" fill="#5a5a5a"/>`;
+                    break;
+                case "Pocket Watch":
+                    body = `<circle cx="16" cy="17" r="9.5" fill="#d4af37"/>
+                        <circle cx="16" cy="17" r="7.4" fill="#f6f2e4"/>
+                        <rect x="14" y="4.5" width="4" height="2.4" rx="1" fill="#d4af37"/>
+                        <rect x="15" y="1.5" width="2" height="3.5" rx="1" fill="#c9a02a"/>
+                        <line x1="16" y1="17" x2="16" y2="12.5" stroke="#3a3a3a" stroke-width="0.9"/>
+                        <line x1="16" y1="17" x2="19.2" y2="18.3" stroke="#3a3a3a" stroke-width="0.9"/>`;
+                    break;
+                case "Love Letter":
+                    body = `<rect x="5" y="9" width="22" height="16" rx="1.5" fill="#f7f3e8"/>
+                        <path d="M5 10 L16 19 L27 10" stroke="#d8ceb0" stroke-width="1.2" fill="none"/>
+                        <path d="M16 15 C14.5 12.8 11 13.4 11 16 C11 18.4 16 21 16 21 C16 21 21 18.4 21 16 C21 13.4 17.5 12.8 16 15 Z" fill="#e0435a"/>`;
+                    break;
+                case "Vintage Rose":
+                    body = `<path d="M16 10 C19 9 22 11 21 14 C24 14.5 24.5 18 21.5 19 C22 22 18.5 23.5 16.5 21.5 C14.5 23.5 11 22 11.5 19 C8.5 18 9 14.5 12 14 C11 11 14 9 16 10 Z" fill="#c9435f"/>
+                        <circle cx="16" cy="15.5" r="2.6" fill="#e07a92"/>
+                        <path d="M15 23 L14 28" stroke="#5f8a5f" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M14 26 L11 27.5" stroke="#5f8a5f" stroke-width="1.1" stroke-linecap="round"/>`;
+                    break;
+                default:
+                    body = `<circle cx="16" cy="16" r="9" fill="#a3c9a8"/>`;
+            }
+
+            return `<svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                ${defs}${shadow}${body}${gloss(11)}
+            </svg>`;
+        }
+
+        const BEAD_COLOR_CHOICES = ["Pearl White", "Baby Pink", "Sky Blue", "Mint Green", "Lavender", "Sunshine Yellow", "Red", "Black", "Gold", "Silver"];
+        const BEAD_PICK_LIMIT = 10;
+
+        const BEAD_COLOR_HEX = {
+            "Pearl White": "#f7f5f0", "Baby Pink": "#f5b8cc", "Sky Blue": "#a8d4f0",
+            "Mint Green": "#b3e0c2", "Lavender": "#cbb8ea", "Sunshine Yellow": "#f5dd6e",
+            "Red": "#e06666", "Black": "#2b2b2b", "Gold": "#d4af37", "Silver": "#c7c9cc"
+        };
+
+        function beadSVG(hex, size, idSuffix) {
+            const gid = `beadGrad_${idSuffix}`;
+            const sid = `beadShine_${idSuffix}`;
+            return `<svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="${gid}" cx="38%" cy="30%" r="80%">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                        <stop offset="24%" stop-color="${hex}" stop-opacity="0.9"/>
+                        <stop offset="72%" stop-color="${hex}"/>
+                        <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+                    </radialGradient>
+                    <radialGradient id="${sid}" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+                <ellipse cx="16" cy="27.5" rx="8.5" ry="2.1" fill="#000000" opacity="0.16"/>
+                <circle cx="16" cy="16" r="13.5" fill="url(#${gid})" stroke="rgba(0,0,0,0.28)" stroke-width="0.6"/>
+                <ellipse cx="20.5" cy="21" rx="5.5" ry="3.2" fill="#000000" opacity="0.09"/>
+                <ellipse cx="11.5" cy="10.3" rx="4.6" ry="2.9" fill="url(#${sid})"/>
+                <ellipse cx="10.2" cy="9" rx="1.5" ry="1" fill="#ffffff" opacity="0.85"/>
+            </svg>`;
+        }
+
+        const CREAM_COLOR_CHOICES = ["Pink", "Yellow", "Blue", "Green", "Purple", "Black"];
+        const CREAM_COLOR_PICK_LIMIT = 2;
+
+        const CREAM_COLOR_HEX = {
+            Pink: "#f6c9d8", Yellow: "#f7e9a0", Blue: "#bcdcf2", Green: "#c8e6c2", Purple: "#dcc9ec", Black: "#2b2b2b"
+        };
+
+        // Builds a layered background that reads as thick, glossy whipped
+        // cream rather than a flat color fill: a soft top-left sheen, a
+        // gentle ambient shadow, and — when two shades are picked — a
+        // marbled swirl instead of a hard diagonal line.
+        function creamLayers(hexList) {
+            const sheen = "radial-gradient(ellipse 70% 45% at 28% 18%, rgba(255,255,255,0.75), rgba(255,255,255,0) 60%)";
+            const softShine = "radial-gradient(circle at 50% 10%, rgba(255,255,255,0.35), rgba(255,255,255,0) 32%)";
+            const ambientShadow = "radial-gradient(ellipse 70% 50% at 78% 88%, rgba(0,0,0,0.14), rgba(0,0,0,0) 60%)";
+
+            if (hexList.length <= 1) {
+                const hex = hexList[0] || "var(--pastel-border)";
+                return [sheen, softShine, ambientShadow, hex].join(", ");
+            }
+
+            const [a, b] = hexList;
+            const swirl = [
+                `radial-gradient(circle at 22% 28%, ${a} 0%, ${a} 26%, transparent 52%)`,
+                `radial-gradient(circle at 78% 22%, ${b} 0%, ${b} 24%, transparent 50%)`,
+                `radial-gradient(circle at 30% 78%, ${b} 0%, ${b} 27%, transparent 54%)`,
+                `radial-gradient(circle at 76% 72%, ${a} 0%, ${a} 25%, transparent 52%)`,
+                `linear-gradient(135deg, ${a} 0%, ${b} 100%)`
+            ];
+            return [sheen, softShine, ambientShadow, ...swirl].join(", ");
+        }
+
+        function creamSwatchStyle(hex) {
+            return `background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.85), rgba(255,255,255,0) 45%), ${hex};`;
+        }
+
+        let beadSeq = 0;
+        let dragState = null;
+        let caseBuilder = { productId: null, phoneModel: "", text: "", charms: [], beads: [], colors: [], positions: {} };
+
+        let cart = []; // each entry: { id, name, price, selectedOption, qty }
+        let selectedPaymentMethod = "";
+        let orderCounter = 1;
+
+        function escapeHTML(str) {
+            const div = document.createElement("div");
+            div.textContent = str ?? "";
+            return div.innerHTML;
+        }
+
+        function optionLabel(opt) {
+            return (opt && typeof opt === "object") ? opt.name : opt;
+        }
+
+        function optionPrice(product, opt) {
+            return (opt && typeof opt === "object" && typeof opt.price === "number") ? opt.price : product.price;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => toast.classList.remove("show"), 2000);
+        }
+
+        function renderView(category) {
+            const main = document.getElementById("main-content");
+            main.innerHTML = "";
+
+            if (category === "cases") {
+                main.appendChild(createSection("✨ Customized Phone Cases ($15)", products.filter(p => p.subcategory === "customized")));
+                main.appendChild(createSection("🌸 Non-Customized Phone Cases ($13)", products.filter(p => p.subcategory === "non-customized")));
+            } else if (category === "all") {
+                main.appendChild(createSection("📱 Phone Cases (Click icon to view all)", products.filter(p => p.category === "cases")));
+                main.appendChild(createSection("🌱 Keychains, Trinkets & More", products.filter(p => p.category !== "cases")));
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                const title = category.charAt(0).toUpperCase() + category.slice(1);
+                main.appendChild(createSection(`🍀 ${title}`, filtered));
+            }
+        }
+
+        function createSection(titleText, items) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "section-wrapper";
+
+            const title = document.createElement("h2");
+            title.className = "section-title";
+            title.innerText = titleText;
+            wrapper.appendChild(title);
+
+            const grid = document.createElement("div");
+            grid.className = "product-grid";
+
+            items.forEach(product => {
+                const card = document.createElement("div");
+                card.className = "product-card";
+
+                let optionsHTML = "";
+                if (product.options && product.options.length > 0) {
+                    optionsHTML = `<select class="options-select" id="select-${product.id}">
+                        ${product.options.map(opt => {
+                            const label = optionLabel(opt);
+                            const price = optionPrice(product, opt);
+                            const showPrice = (opt && typeof opt === "object") ? ` ($${price.toFixed(2)})` : "";
+                            return `<option value="${escapeHTML(label)}">${escapeHTML(label)}${showPrice}</option>`;
+                        }).join('')}
+                    </select>`;
+                }
+
+                let priceDisplay;
+                if (product.options && product.options.length > 0 && product.options.some(o => typeof o === "object")) {
+                    const prices = product.options.map(o => optionPrice(product, o));
+                    const minP = Math.min(...prices);
+                    const maxP = Math.max(...prices);
+                    priceDisplay = minP === maxP ? `$${minP.toFixed(2)}` : `From $${minP.toFixed(2)}`;
+                } else {
+                    priceDisplay = `$${product.price.toFixed(2)}`;
+                }
+
+                const unavailable = product.available === false;
+                let actionHTML;
+                if (unavailable) {
+                    actionHTML = `<div class="unavailable-badge">Currently Unavailable</div><button class="add-to-cart" disabled>Unavailable</button>`;
+                } else if (product.builderType) {
+                    actionHTML = `<button class="add-to-cart" onclick="openCaseBuilder(${product.id})">Customize & Add to Cart</button>`;
+                } else {
+                    actionHTML = `<button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>`;
+                }
+
+                card.innerHTML = `
+                    <div class="product-image"
+                         onclick="filterProducts('cases')"
+                         title="Click to view Phone Cases">
+                        ${product.icon}
+                    </div>
+                    <div class="product-title">${escapeHTML(product.name)}</div>
+                    <div class="product-price">${priceDisplay}</div>
+                    ${optionsHTML}
+                    ${actionHTML}
+                `;
+                grid.appendChild(card);
+            });
+
+            wrapper.appendChild(grid);
+            return wrapper;
+        }
+
+        function filterProducts(category, btnElement) {
+            document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+            if (btnElement) {
+                btnElement.classList.add("active");
+            } else {
+                document.querySelectorAll(".filter-btn").forEach(btn => {
+                    if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(`'${category}'`)) {
+                        btn.classList.add("active");
+                    }
+                });
+            }
+            renderView(category);
+        }
+
+        function toggleCart() {
+            document.getElementById("cart-drawer").classList.toggle("open");
+        }
+
+        function openCaseBuilder(productId) {
+            const product = products.find(p => p.id === productId);
+            const selectElement = document.getElementById(`select-${productId}`);
+            caseBuilder = {
+                productId,
+                phoneModel: selectElement ? selectElement.value : "",
+                text: "",
+                charms: [],
+                beads: [],
+                colors: [],
+                positions: {}
+            };
+            document.getElementById("case-text-input").value = "";
+            document.getElementById("case-builder-title").textContent = `Design Your ${product.name}`;
+            renderCaseBuilder();
+            document.getElementById("case-builder-modal").classList.add("active");
+        }
+
+        function closeCaseBuilder() {
+            document.getElementById("case-builder-modal").classList.remove("active");
+        }
+
+        function toggleCharm(charm) {
+            const i = caseBuilder.charms.indexOf(charm);
+            if (i > -1) {
+                caseBuilder.charms.splice(i, 1);
+                delete caseBuilder.positions[charm];
+            } else if (caseBuilder.charms.length < CHARM_PICK_LIMIT) {
+                caseBuilder.charms.push(charm);
+                setDefaultPosition(charm);
+            }
+            renderCaseBuilder();
+        }
+
+        function addBead(color) {
+            if (caseBuilder.beads.length >= BEAD_PICK_LIMIT) {
+                showToast(`You can add up to ${BEAD_PICK_LIMIT} beads.`);
+                return;
+            }
+            const uid = `bead-${beadSeq++}`;
+            caseBuilder.beads.push({ uid, color });
+            setDefaultPosition(uid);
+            renderCaseBuilder();
+        }
+
+        function removeBead(uid) {
+            caseBuilder.beads = caseBuilder.beads.filter(b => b.uid !== uid);
+            delete caseBuilder.positions[uid];
+            renderCaseBuilder();
+        }
+
+        function setDefaultPosition(uid) {
+            if (caseBuilder.positions[uid]) return;
+            const count = Object.keys(caseBuilder.positions).length;
+            const cols = 3;
+            const col = count % cols;
+            const row = Math.floor(count / cols);
+            const jitterX = (Math.random() * 8 - 4);
+            const jitterY = (Math.random() * 8 - 4);
+            const x = Math.min(85, Math.max(15, 22 + col * 28 + jitterX));
+            const y = Math.min(85, Math.max(15, 22 + row * 22 + jitterY));
+            caseBuilder.positions[uid] = { x, y };
+        }
+
+        function updateCaseText(value) {
+            caseBuilder.text = value;
+            updateCaseTextPreview();
+            updateConfirmState();
+        }
+
+        function updateCaseTextPreview() {
+            const el = document.getElementById("case-preview-text");
+            if (el) el.textContent = caseBuilder.text || "";
+        }
+
+        function escapeAttr(str) {
+            return String(str).replace(/"/g, "&quot;");
+        }
+
+        function renderPreviewItems() {
+            const container = document.getElementById("case-preview-charms");
+            let html = "";
+            caseBuilder.charms.forEach((charm, idx) => {
+                const pos = caseBuilder.positions[charm] || { x: 50, y: 50 };
+                html += `<div class="placed-item charm-item" data-uid="${escapeAttr(charm)}" data-kind="charm" style="left:${pos.x}%; top:${pos.y}%;">${charmSVG(charm, 30, "v" + idx)}</div>`;
+            });
+            caseBuilder.beads.forEach((b, idx) => {
+                const pos = caseBuilder.positions[b.uid] || { x: 50, y: 50 };
+                html += `<div class="placed-item bead-item" data-uid="${escapeAttr(b.uid)}" data-kind="bead" style="left:${pos.x}%; top:${pos.y}%;">${beadSVG(BEAD_COLOR_HEX[b.color], 24, "v" + idx)}</div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderBeadPicker() {
+            const picker = document.getElementById("bead-picker");
+            const totalBeads = caseBuilder.beads.length;
+            picker.innerHTML = BEAD_COLOR_CHOICES.map((color, idx) => {
+                const countOfColor = caseBuilder.beads.filter(b => b.color === color).length;
+                const disabled = totalBeads >= BEAD_PICK_LIMIT;
+                return `<button type="button" class="color-swatch bead-swatch" ${disabled ? "disabled" : ""} onclick="addBead('${color.replace(/'/g, "\\'")}')" title="Add ${escapeHTML(color)} bead">
+                    <span class="bead-swatch-icon">${beadSVG(BEAD_COLOR_HEX[color], 24, "p" + idx)}</span>
+                    <span class="color-swatch-label">${escapeHTML(color)}${countOfColor ? ` ×${countOfColor}` : ""}</span>
+                </button>`;
+            }).join('');
+            document.getElementById("bead-counter").textContent = `${totalBeads} / ${BEAD_PICK_LIMIT} beads added (optional) — tap a bead on the case to remove it`;
+        }
+
+        function updateConfirmState() {
+            const product = products.find(p => p.id === caseBuilder.productId);
+            const confirmBtn = document.getElementById("case-builder-confirm");
+            const charmsOk = caseBuilder.charms.length === CHARM_PICK_LIMIT;
+            const colorsOk = caseBuilder.colors.length === CREAM_COLOR_PICK_LIMIT;
+            const textOk = !product || !product.allowText || caseBuilder.text.trim().length > 0;
+            confirmBtn.disabled = !(charmsOk && colorsOk && textOk);
+        }
+
+        function initDragHandlers() {
+            const container = document.getElementById("case-preview-charms");
+            container.addEventListener("pointerdown", onDragStart);
+            container.addEventListener("pointermove", onDragMove);
+            container.addEventListener("pointerup", onDragEnd);
+            container.addEventListener("pointercancel", onDragEnd);
+        }
+
+        function onDragStart(e) {
+            const item = e.target.closest(".placed-item");
+            if (!item) return;
+            const rect = document.getElementById("case-preview").getBoundingClientRect();
+            dragState = { uid: item.dataset.uid, kind: item.dataset.kind, moved: false, rect, el: item };
+            try { item.setPointerCapture(e.pointerId); } catch (err) {}
+            e.preventDefault();
+        }
+
+        function onDragMove(e) {
+            if (!dragState) return;
+            const { rect, uid, el } = dragState;
+            let x = ((e.clientX - rect.left) / rect.width) * 100;
+            let y = ((e.clientY - rect.top) / rect.height) * 100;
+            x = Math.min(92, Math.max(8, x));
+            y = Math.min(92, Math.max(8, y));
+            dragState.moved = true;
+            caseBuilder.positions[uid] = { x, y };
+            el.style.left = x + "%";
+            el.style.top = y + "%";
+        }
+
+        function onDragEnd(e) {
+            if (!dragState) return;
+            const { uid, kind, moved } = dragState;
+            if (!moved) {
+                if (kind === "charm") toggleCharm(uid);
+                else if (kind === "bead") removeBead(uid);
+            }
+            dragState = null;
+        }
+
+        function toggleCreamColor(color) {
+            const i = caseBuilder.colors.indexOf(color);
+            if (i > -1) {
+                caseBuilder.colors.splice(i, 1);
+            } else if (caseBuilder.colors.length < CREAM_COLOR_PICK_LIMIT) {
+                caseBuilder.colors.push(color);
+            }
+            renderCaseBuilder();
+        }
+
+        function renderCaseBuilder() {
+            const { charms, colors } = caseBuilder;
+            const product = products.find(p => p.id === caseBuilder.productId);
+
+            // Custom text field visibility
+            const textLabel = document.getElementById("case-text-label");
+            const textInput = document.getElementById("case-text-input");
+            if (product && product.allowText) {
+                textLabel.style.display = "block";
+                textInput.style.display = "block";
+            } else {
+                textLabel.style.display = "none";
+                textInput.style.display = "none";
+            }
+            updateCaseTextPreview();
+
+            // Live preview background — soft glossy cream texture
+            document.getElementById("case-preview").style.background =
+                colors.length === 0 ? "var(--pastel-border)" : creamLayers(colors.map(c => CREAM_COLOR_HEX[c]));
+
+            renderPreviewItems();
+
+            // Charm picker
+            const charmPicker = document.getElementById("charm-picker");
+            charmPicker.innerHTML = CHARM_CHOICES.map((charm, idx) => {
+                const selected = charms.includes(charm);
+                const disabled = !selected && charms.length >= CHARM_PICK_LIMIT;
+                return `<button type="button" class="charm-swatch ${selected ? "selected" : ""}" ${disabled ? "disabled" : ""} onclick="toggleCharm('${charm.replace(/'/g, "\\'")}')">
+                    <span class="charm-swatch-icon">${charmSVG(charm, 26, "p" + idx)}</span>
+                    <span class="charm-swatch-label">${escapeHTML(charm)}</span>
+                </button>`;
+            }).join('');
+            document.getElementById("charm-counter").textContent = `${charms.length} / ${CHARM_PICK_LIMIT} selected`;
+
+            // Bead picker
+            renderBeadPicker();
+
+            // Color picker
+            const colorPicker = document.getElementById("color-picker");
+            colorPicker.innerHTML = CREAM_COLOR_CHOICES.map(color => {
+                const selected = colors.includes(color);
+                const disabled = !selected && colors.length >= CREAM_COLOR_PICK_LIMIT;
+                return `<button type="button" class="color-swatch ${selected ? "selected" : ""}" ${disabled ? "disabled" : ""} onclick="toggleCreamColor('${color}')" title="${escapeHTML(color)}">
+                    <span class="color-swatch-dot" style="${creamSwatchStyle(CREAM_COLOR_HEX[color])}"></span>
+                    <span class="color-swatch-label">${escapeHTML(color)}</span>
+                </button>`;
+            }).join('');
+            document.getElementById("color-counter").textContent = `${colors.length} / ${CREAM_COLOR_PICK_LIMIT} selected`;
+
+            updateConfirmState();
+        }
+
+        function confirmCaseBuilder() {
+            const { productId, phoneModel, charms, colors, beads, text } = caseBuilder;
+            const product = products.find(p => p.id === productId);
+
+            const charmSelection = charms.join(", ");
+            const colorSelection = colors.join(", ");
+            const beadSelection = beads.map(b => b.color).join(", ");
+            const customText = (text || "").trim();
+
+            const existing = cart.find(item => item.id === productId
+                && item.selectedOption === phoneModel
+                && item.charmSelection === charmSelection
+                && item.colorSelection === colorSelection
+                && item.beadSelection === beadSelection
+                && item.customText === customText);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, price: product.price, selectedOption: phoneModel, charmSelection, colorSelection, beadSelection, customText, qty: 1 });
+            }
+
+            updateCart();
+            showToast(`Added ${product.name} to cart`);
+            closeCaseBuilder();
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product.available === false) {
+                showToast("This item is currently unavailable.");
+                return;
+            }
+
+            const selectElement = document.getElementById(`select-${productId}`);
+            const selectedOptionLabel = selectElement ? selectElement.value : "Default";
+
+            let itemPrice = product.price;
+            if (product.options && product.options.length > 0) {
+                const matchedOpt = product.options.find(o => optionLabel(o) === selectedOptionLabel);
+                if (matchedOpt) itemPrice = optionPrice(product, matchedOpt);
+            }
+
+            // Aggregate quantity if the same product + option is already in the cart
+            const existing = cart.find(item => item.id === productId && item.selectedOption === selectedOptionLabel);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, price: itemPrice, selectedOption: selectedOptionLabel, qty: 1 });
+            }
+
+            updateCart();
+            showToast(`Added ${product.name} to cart`);
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCart();
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function cartTotal() {
+            return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+        }
+
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById("cart-count").innerText = totalItems;
+            const cartItemsContainer = document.getElementById("cart-items");
+            const checkoutBtn = document.getElementById("checkout-btn");
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `<p style="opacity: 0.6; text-align: center; margin-top: 2rem;">Your cart is empty!</p>`;
+                checkoutBtn.disabled = true;
+            } else {
+                cartItemsContainer.innerHTML = "";
+                cart.forEach((item, index) => {
+                    const itemElement = document.createElement("div");
+                    itemElement.className = "cart-item";
+                    itemElement.innerHTML = `
+                        <div class="cart-item-header">
+                            <span>${escapeHTML(item.name)}</span>
+                            <span>$${(item.price * item.qty).toFixed(2)}</span>
+                        </div>
+                        <div class="cart-item-option">Option: ${escapeHTML(item.selectedOption)}</div>
+                        ${item.customText ? `<div class="cart-item-option">Text: "${escapeHTML(item.customText)}"</div>` : ""}
+                        ${item.charmSelection ? `<div class="cart-item-option">Charms: ${escapeHTML(item.charmSelection)}</div>` : ""}
+                        ${item.beadSelection ? `<div class="cart-item-option">Beads: ${escapeHTML(item.beadSelection)}</div>` : ""}
+                        ${item.colorSelection ? `<div class="cart-item-option">Cream colours: ${escapeHTML(item.colorSelection)}</div>` : ""}
+                        <div class="cart-item-controls">
+                            <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                            <button class="remove-item-btn" onclick="removeItem(${index})">Remove</button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+                checkoutBtn.disabled = false;
+            }
+            document.getElementById("cart-total").innerText = `$${cartTotal().toFixed(2)}`;
+        }
+
+        /* --- CHECKOUT & PAYMENT MODAL LOGIC --- */
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty!");
+                return;
+            }
+            toggleCart();
+            document.getElementById("checkout-modal").classList.add("active");
+            resetModalViews();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById("checkout-modal").classList.remove("active");
+        }
+
+        function resetModalViews() {
+            document.querySelectorAll(".payment-opt-btn").forEach(btn => btn.classList.remove("selected"));
+            document.getElementById("payment-options-group").style.display = "flex";
+            document.getElementById("checkout-form").classList.remove("active");
+            document.getElementById("checkout-form").reset();
+            document.getElementById("qr-display").classList.remove("active");
+            document.getElementById("receipt-display").classList.remove("active");
+            document.getElementById("paynow-send-status").textContent = "";
+            document.getElementById("receipt-send-status").textContent = "";
+            document.getElementById("modal-title").innerText = "Choose Payment Method";
+            ["err-phone", "err-email", "err-address"].forEach(id => document.getElementById(id).textContent = "");
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method === 'paynow' ? 'PayNow' : 'Cash on Meetup';
+            document.querySelectorAll(".payment-opt-btn").forEach(btn => btn.classList.remove("selected"));
+            document.getElementById(method === 'paynow' ? "opt-paynow" : "opt-cash").classList.add("selected");
+            document.getElementById("checkout-form").classList.add("active");
+        }
+
+        function validateForm() {
+            let valid = true;
+            const phone = document.getElementById("cust-phone");
+            const email = document.getElementById("cust-email");
+            const address = document.getElementById("cust-address");
+
+            const phonePattern = /^[+]?[0-9 ]{7,15}$/;
+            if (!phonePattern.test(phone.value.trim())) {
+                document.getElementById("err-phone").textContent = "Enter a valid phone number.";
+                valid = false;
+            } else {
+                document.getElementById("err-phone").textContent = "";
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email.value.trim())) {
+                document.getElementById("err-email").textContent = "Enter a valid email address.";
+                valid = false;
+            } else {
+                document.getElementById("err-email").textContent = "";
+            }
+
+            if (address.value.trim().length < 5) {
+                document.getElementById("err-address").textContent = "Enter a mailing address or pickup info.";
+                valid = false;
+            } else {
+                document.getElementById("err-address").textContent = "";
+            }
+
+            return valid;
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            if (!validateForm()) return;
+
+            document.getElementById("checkout-form").classList.remove("active");
+            document.getElementById("payment-options-group").style.display = "none";
+
+            if (selectedPaymentMethod === 'PayNow') {
+                document.getElementById("modal-title").innerText = "Complete PayNow Payment";
+                document.getElementById("qr-display").classList.add("active");
+            } else {
+                confirmPaymentAndSendReceipt();
+            }
+        }
+
+        function buildOrderId() {
+            const now = new Date();
+            const stamp = now.toISOString().replace(/[-:TZ.]/g, "").slice(0, 12);
+            return `4CS-${stamp}-${orderCounter++}`;
+        }
+
+        function confirmPaymentAndSendReceipt() {
+            const paynowBtn = document.getElementById("paynow-confirm-btn");
+            if (paynowBtn) paynowBtn.disabled = true;
+
+            const phone = document.getElementById("cust-phone").value.trim();
+            const email = document.getElementById("cust-email").value.trim();
+            const address = document.getElementById("cust-address").value.trim();
+            const remarks = document.getElementById("cust-remarks").value.trim();
+            const orderId = buildOrderId();
+            const orderDate = new Date().toLocaleString();
+
+            let total = 0;
+            let itemsListHTML = "";
+            let itemsTextList = "";
+
+            cart.forEach(item => {
+                const lineTotal = item.price * item.qty;
+                total += lineTotal;
+                const customizeBits = [
+                    item.customText ? `Text: "${item.customText}"` : null,
+                    item.charmSelection ? `Charms: ${item.charmSelection}` : null,
+                    item.beadSelection ? `Beads: ${item.beadSelection}` : null,
+                    item.colorSelection ? `Cream: ${item.colorSelection}` : null
+                ].filter(Boolean).join(" | ");
+                itemsListHTML += `<div class="receipt-line"><span>${escapeHTML(item.name)} (${escapeHTML(item.selectedOption)}) x${item.qty}${customizeBits ? `<br><span style="font-size:0.75rem;opacity:0.75;">${escapeHTML(customizeBits)}</span>` : ""}</span><span>$${lineTotal.toFixed(2)}</span></div>`;
+                itemsTextList += `- ${item.name} (${item.selectedOption}) x${item.qty}: $${lineTotal.toFixed(2)}${customizeBits ? ` [${customizeBits}]` : ""}\n`;
+            });
+
+            document.getElementById("qr-display").classList.remove("active");
+            document.getElementById("modal-title").innerText = "Order Receipt";
+            document.getElementById("receipt-display").classList.add("active");
+
+            document.getElementById("receipt-email-note").innerHTML =
+                `A copy of this receipt will be sent to <b>${escapeHTML(email)}</b>, and the studio will be notified.`;
+
+            document.getElementById("receipt-details").innerHTML = `
+                <h4>4-clovers studio 🍀</h4>
+                <div class="receipt-line"><b>Order ID:</b> <span>${orderId}</span></div>
+                <div class="receipt-line"><b>Date:</b> <span>${orderDate}</span></div>
+                <div class="receipt-line"><b>Payment Method:</b> <span>${escapeHTML(selectedPaymentMethod)}</span></div>
+                <div class="receipt-line"><b>Customer Email:</b> <span>${escapeHTML(email)}</span></div>
+                <div class="receipt-line"><b>Phone Number:</b> <span>${escapeHTML(phone)}</span></div>
+                <div class="receipt-line"><b>Mailing/Pickup:</b> <span>${escapeHTML(address)}</span></div>
+                ${remarks ? `<div class="receipt-line"><b>Remarks:</b> <span>${escapeHTML(remarks)}</span></div>` : ""}
+                <hr style="margin: 0.6rem 0; border: none; border-top: 1px dashed var(--primary-sage);">
+                ${itemsListHTML}
+                <hr style="margin: 0.6rem 0; border: none; border-top: 1px dashed var(--primary-sage);">
+                <div class="receipt-line" style="font-weight: 700; font-size: 1rem; color: var(--dark-sage);">
+                    <span>Total Paid:</span>
+                    <span>$${total.toFixed(2)}</span>
+                </div>
+            `;
+
+            sendReceiptEmail({
+                orderId,
+                orderDate,
+                email,
+                phone,
+                address,
+                remarks,
+                paymentMethod: selectedPaymentMethod,
+                itemsTextList,
+                total
+            });
+
+            cart = [];
+            updateCart();
+        }
+
+        function sendReceiptEmail(order) {
+            const statusEl = document.getElementById("receipt-send-status");
+            const configured = window.emailjs
+                && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY"
+                && EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID"
+                && EMAILJS_TEMPLATE_ID !== "YOUR_TEMPLATE_ID";
+
+            if (!configured) {
+                statusEl.className = "send-status error";
+                statusEl.textContent = "Email sending isn't set up yet — see the EmailJS setup notes to connect this.";
+                return;
+            }
+
+            statusEl.className = "send-status";
+            statusEl.textContent = "Sending receipt...";
+
+            const emailParams = {
+                order_id: order.orderId,
+                order_date: order.orderDate,
+                customer_email: order.email,
+                admin_email_1: ADMIN_EMAILS[0],
+                admin_email_2: ADMIN_EMAILS[1],
+                to_email: [order.email, ...ADMIN_EMAILS].join(", "),
+                phone_number: order.phone,
+                mailing_address: order.address,
+                remarks: order.remarks || "(none)",
+                payment_method: order.paymentMethod,
+                order_summary: order.itemsTextList,
+                total_amount: `$${order.total.toFixed(2)}`
+            };
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams)
+                .then(() => {
+                    statusEl.className = "send-status ok";
+                    statusEl.textContent = "Receipt sent!";
+                })
+                .catch((error) => {
+                    statusEl.className = "send-status error";
+                    const detail = (error && (error.text || error.message)) ? (error.text || error.message) : JSON.stringify(error);
+                    statusEl.textContent = "Couldn't send the receipt email. Debug info: " + detail;
+                    console.error("EmailJS error:", error);
+                });
+        }
+
+        function finishCheckout() {
+            closeCheckoutModal();
+        }
+
+        initDragHandlers();
+        renderView("all");
+    </script>
+</body>
+</html>
